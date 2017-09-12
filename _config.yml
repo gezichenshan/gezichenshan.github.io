@@ -12,17 +12,17 @@ github_repo: "https://github.com/gezichenshan/gezichenshan.github.io.git" # you 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
 sidebar-about-description: "Goals determine what you going to be!"
-sidebar-avatar: img/avatar-by.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-avatar: img/psb.jpeg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
 # SNS settings
 RSS: false
 # weibo_username:     qiubaiying
-zhihu_username:     qiubaiying
-github_username:    qiubaiying
-facebook_username:  baiying.qiu.7
-jianshu_username:   e71990ada2fd
+zhihu_username:     none
+github_username:    gezichenshan
+facebook_username:  none
+jianshu_username:   一个废人
 #twitter_username:   qiubaiying
 
 
@@ -56,7 +56,7 @@ kramdown:
 
 # 评论系统
 # Disqus settings（https://disqus.com/）
-disqus_username: qiubaiying
+disqus_username: gezichenshan
 
 # 多说 将于2017年6月1日正式关停服务，建议使用 Disqus（http://dev.duoshuo.com/threads/58d1169ae293b89a20c57241）
 # Duoshuo settings
