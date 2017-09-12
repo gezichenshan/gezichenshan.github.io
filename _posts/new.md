@@ -1,3 +1,14 @@
+---
+layout:     post
+title:      Node.js
+subtitle:   Node.js之Guide(2)：HTTP业务的剖析
+date:       2017-09-06
+author:     gezichenshan
+header-img: img/post-bg-ios9-web.jpg
+catalog: true
+tags:
+    - Nodejs
+---
 Anatomy of an HTTP Transaction(https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction/)
 
 本教程的目的在于传授对Node.js处理HTTP进程的扎实的理解。在不考虑编程语言和编程环境的情况下，我们假设你大体上了解HTTP请求是怎么工作的，同样也假设你了解nodejs的 [EventEmitters](https://nodejs.org/api/events.html)(事件发射器) 和 [Streams](https://nodejs.org/api/stream.html)(流)是怎么一回事。如果你不太了解它们，那请你先快速阅读一下它们的API文档。
