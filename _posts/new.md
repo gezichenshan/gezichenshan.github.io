@@ -9,11 +9,11 @@ catalog: true
 tags:
     - Nodejs
 ---
-#Anatomy of an HTTP Transaction(https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction/)
+# Anatomy of an HTTP Transaction(https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction/)
 
 本教程的目的在于传授对Node.js处理HTTP进程的扎实的理解。在不考虑编程语言和编程环境的情况下，我们假设你大体上了解HTTP请求是怎么工作的，同样也假设你了解nodejs的 [EventEmitters](https://nodejs.org/api/events.html)(事件发射器) 和 [Streams](https://nodejs.org/api/stream.html)(流)是怎么一回事。如果你不太了解它们，那请你先快速阅读一下它们的API文档。
 
-##创建一个服务
+## 创建一个服务
 
 任何node的web服务应用在某种情况下都必须创建一个web服务对象(server object)。这个对象通过 [createServer](https://nodejs.org/api/http.html#http_http_createserver_requestlistener)创建。
 ```
@@ -35,7 +35,7 @@ server.on('request', (request, response) => {
 
 为了服务请求，服务对象上的[listen](https://nodejs.org/api/http.html#http_server_listen_port_hostname_backlog_callback)方法需要被调用。在多数情况下，你只需要将你想要监听的端口数字传给listen方法即可。不过这里也有其他参数选项，请参考[API reference](https://nodejs.org/api/http.html)。
 
-###方法，URL和头(Method, URL and Headers)
+### 方法，URL和头(Method, URL and Headers)
 当我们处理一个请求时，我们往往首先会看这个请求的方法和URL，以此来找寻合适的动作(actions)处理它。Node在请求对象上(request object)上加了一些便于使用的属性，让我们处理起来相对轻松一些。
 ```
 const { method, url } = request;
@@ -55,7 +55,7 @@ const userAgent = headers['user-agent'];
 
 如果头部信息重复，那么它们的值会被重写，或者组合成以逗号相隔的字符串。在一些情况下，这可能会导致问题，所以也可以传入[rawHeaders](https://nodejs.org/api/http.html#http_message_rawheaders)。
 
-###请求主体(Request Body)
+### 请求主体(Request Body)
 当我们接受到一个POST或PUT请求，请求主体对我们的应用来说就至关重要了。获取请求主体的数据比获取请求头更麻烦。传入处理程序的请求对象经过了[ReadableStream](https://nodejs.org/api/stream.html#stream_class_stream_readable)的接口。我们可以监听这个流，或者将它向其他流一样传到其他地方去。通过监听流的'data'和'end'事件，我们可以抓到这个流的数据。
 
 每一个'data'事件由释放出来的块都是一个缓存([Buffer](https://nodejs.org/api/buffer.html))。如果这个缓存以字符串形式存在，那么最好先将其转化成数组形式，然后在end事件里再将其字符串化。
@@ -72,11 +72,11 @@ request.on('data', (chunk) => {
 **注意**：在多数情况下，这样做看起来很繁琐。幸运的是，在 [npm](https://www.npmjs.com/) 上，我们有很多像[concat-stream](https://www.npmjs.com/package/concat-stream)和 [body](https://www.npmjs.com/package/body) 一样的组件，它们可以帮助我们简化一些这样的繁琐逻辑。
 在继续探索之前，对事情怎么发生的有一个好的理解很重要，这也是你走到这里的原因！
 
-###关于错误的一件小事(errors)
+### 关于错误的一件小事(errors)
 
 因为请求对象(request object)是一个可读的流([ReadableStream](https://nodejs.org/api/stream.html#stream_class_stream_readable))，同时也是事件发射器([EventEmitter](https://nodejs.org/api/events.html#events_class_eventemitter))，当一个错误发生时，它们的表现一样。请求流的错误通过发送'error'事件表现出来。**如果你没有监听这个事件，这个错误将会被thrown掉，这会导致Node.js程序崩溃。**因此，即使你记录了这个错误并让程序继续跑，你也需要在这个请求流上加一个'错误'监听器。（最好是发送类似HTTP error response的响应。我们一会再讲。 ）
 
-###到目前为止，我们收获了什么
+### 到目前为止，我们收获了什么
 到目前为止，我们创建了一个服务，知道了方法(method)、URL、头(headers)和请求主体(body out of requests)。当我们将它们放到一块，将会得到以下东西：
 ```
 const http = require('http');
@@ -100,7 +100,7 @@ http.createServer((request, response) => {
 
 到目前为止，我们还没碰过响应对象(response object)，响应对象是 [ServerResponse](https://nodejs.org/api/http.html#http_class_http_serverresponse)的一个实例，同时也是一个可写的流 [WritableStream](https://nodejs.org/api/stream.html#stream_class_stream_writable)。它包含了很多很有用的方法，以此发回数据给客户端。我们接下来谈论response。
 
-###HTTP Status Code
+### HTTP Status Code
 
 如果你不清楚怎么设置它，记住HTTP response里的 status code 通常都是200。当然，也不是所有HTTP response都是200，而且有些时候你也要用到其他status code值。因此，你需要设置statusCode属性。
 ```
@@ -108,14 +108,14 @@ response.statusCode = 404; // Tell the client that the resource wasn't found.
 ```
 我们也可以通过其他捷径设置statusCode，下面来看一看。
 
-###设置响应头(response headers)。
+### 设置响应头(response headers)。
 通过[setHeader](https://nodejs.org/api/http.html#http_response_setheader_name_value)方法，我们可以很方便的设置头信息。
 ```
 response.setHeader('Content-Type', 'application/json');
 response.setHeader('X-Powered-By', 'bacon');
 ```
 大小写对响应头的设置没影响，如果你重复设置了一个头，只有最后一句代码生效。
-###显示地发送头部数据
+### 显示地发送头部数据
 
 我们假设你用我们上述“隐式的头”的方式来设置头和status code。也就是说，在你发送数据体(body data)前，你依靠node帮助你去发送头部信息。
 
@@ -129,7 +129,7 @@ response.writeHead(200, {
 
 当你设置好头后（无论是显式地还是隐式地），你就可以开始发送响应数据了。
 
-###发送响应体(Response Body)
+### 发送响应体(Response Body)
 因为响应对象是一个可写的流( [WritableStream](https://nodejs.org/api/stream.html#stream_class_stream_writable))，我们可以用常规的流方法，写一个响应体发送给客户端。
 
 ```
@@ -148,10 +148,10 @@ response.end('<html><body><h1>Hello, World!</h1></body></html>');
 
  **注意：**在向响应体写数据块之前，状态（status）和头（headers）的设置非常重要。为什么这么说，因为在HTTP响应里，响应头都是先于响应体的。
 
-###关于错误的另一件小事
+### 关于错误的另一件小事
 响应流同样能发送“error”事件，某些情况下你必须要处理这个错误。对请求流里的错误处理建议也适用于此。
 
-###将这些组合到一起
+### 将这些组合到一起
 Now that we've learned about making HTTP responses, let's put it all together. Building on the earlier example, we're going to make a server that sends back all of the data that was sent to us by the user. We'll format that data as JSON using JSON.stringify.
 至此，我们学习了如何生成HTTP响应，让我们合起来看一起。在之前的例子的基础上，我们加这样一个服务，它将用户发给我们的数据又发回给用户。我们用JSON.stringify将数据JSON化：
 ```
@@ -188,7 +188,7 @@ http.createServer((request, response) => {
   });
 }).listen(8080);
 ```
-###一个回显服务端的例子
+### 一个回显服务端的例子
 
 将上一个例子简化成一个简单的回显服务，它把任何接收的数据原封不动地发回。我们要做的就是从请求流里的数据抓取出来，然后将其写入响应流里，就像我们之前做过的一样。
 ```
